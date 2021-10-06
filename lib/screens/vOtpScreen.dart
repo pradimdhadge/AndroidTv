@@ -3,8 +3,13 @@ import 'package:androidtv/myWidgets/myButton.dart';
 import 'package:androidtv/myWidgets/thirdRow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VotpScreen extends StatelessWidget {
+  FocusNode vfocus = FocusNode();
+  static final GlobalKey<FormFieldState<String>> _numkey =
+      GlobalKey<FormFieldState<String>>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +27,7 @@ class VotpScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [firstRow(), _loginRow(), thirdRow()],
+                children: [firstRow(), _loginRow(context), thirdRow()],
               ),
             ),
           ),
@@ -31,7 +36,7 @@ class VotpScreen extends StatelessWidget {
     );
   }
 
-  _loginRow() {
+  _loginRow(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -48,55 +53,45 @@ class VotpScreen extends StatelessWidget {
           'OTP (One Time Password)',
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
+        SizedBox(height: 10),
         Row(
           children: [
-            Column(
-              children: [
-                DropdownButton(
-                  items: [
-                    DropdownMenuItem(
-                      child: Text(
-                        '+91',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
             Container(
-              width: 170,
-              child: TextField(
-                cursorColor: Colors.white,
-                keyboardType: TextInputType.phone,
-                maxLength: 10,
-                style: TextStyle(color: Colors.white, fontSize: 20),
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: InputDecoration(
-                  hintText: 'Enter phone no',
-                  hintStyle: TextStyle(color: Colors.white, fontSize: 20),
-                  isDense: true,
-                  focusColor: Colors.white,
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  counter: Container(),
+              width: 200,
+              child: PinCodeTextField(
+                key: _numkey,
+                length: 6,
+                obscureText: false,
+                animationType: AnimationType.fade,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.underline,
+                  borderRadius: BorderRadius.circular(5),
+                  fieldHeight: 40,
+                  fieldWidth: 30,
+                  activeFillColor: Colors.white,
                 ),
+                animationDuration: Duration(milliseconds: 300),
+                enableActiveFill: true,
+                beforeTextPaste: (text) {
+                  print("Allowing to paste $text");
+                  return true;
+                },
+                appContext: context,
+                onChanged: (String value) {},
+                onSubmitted: (value) {
+                  FocusScope.of(context).requestFocus(vfocus);
+                },
               ),
             )
           ],
         ),
-        SizedBox(height: 20),
+        Container(
+          width: 200,
+          alignment: Alignment.centerRight,
+          child: InkWell(
+            child: Text('00 : 59', style: TextStyle(color: Colors.white)),
+          ),
+        ),
         MyButton(
           child: Text(
             'Verify',
@@ -104,10 +99,12 @@ class VotpScreen extends StatelessWidget {
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.right,
           ),
           width: 100,
           height: 35,
           focusColor: Color.fromARGB(255, 98, 0, 238),
+          focusNode: vfocus,
         ),
       ],
     );

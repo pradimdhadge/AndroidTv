@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class LwpScreen extends StatelessWidget {
+  static final GlobalKey<FormFieldState<String>> _numkey =
+      GlobalKey<FormFieldState<String>>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +74,7 @@ class LwpScreen extends StatelessWidget {
             Container(
               width: 170,
               child: TextField(
+                key: _numkey,
                 cursorColor: Colors.white,
                 keyboardType: TextInputType.phone,
                 maxLength: 10,

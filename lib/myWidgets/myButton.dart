@@ -7,14 +7,17 @@ class MyButton extends StatefulWidget {
   Color? backgroundColor = Colors.transparent;
   Color? focusColor = Colors.white;
   Widget? child;
+  FocusNode? focusNode;
 
-  MyButton(
-      {this.height,
-      this.width,
-      this.textColor,
-      this.backgroundColor,
-      this.focusColor,
-      this.child});
+  MyButton({
+    this.height,
+    this.width,
+    this.textColor,
+    this.backgroundColor,
+    this.focusColor,
+    this.child,
+    this.focusNode,
+  });
 
   @override
   _MyButtonState createState() => _MyButtonState();
@@ -27,6 +30,7 @@ class _MyButtonState extends State<MyButton> {
   Widget build(BuildContext context) {
     return InkWell(
       focusColor: widget.focusColor,
+      focusNode: widget.focusNode,
       onFocusChange: (f) {
         setState(() {
           isFocus = f;
