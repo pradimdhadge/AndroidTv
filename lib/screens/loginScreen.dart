@@ -1,6 +1,7 @@
 import 'package:androidtv/myWidgets/firstRow.dart';
 import 'package:androidtv/myWidgets/myButton.dart';
 import 'package:androidtv/myWidgets/thirdRow.dart';
+import 'package:androidtv/screens/lwpScreen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -21,7 +22,7 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [firstRow(), _loginRow(), thirdRow()],
+                children: [firstRow(), _loginRow(context), thirdRow()],
               ),
             ),
           ),
@@ -30,7 +31,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  _loginRow() {
+  _loginRow(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -54,6 +55,7 @@ class LoginScreen extends StatelessWidget {
           width: 300,
           height: 40,
           focusColor: Color.fromARGB(255, 98, 0, 238),
+          onTap: () {},
         ),
         SizedBox(height: 10),
         MyButton(
@@ -67,6 +69,10 @@ class LoginScreen extends StatelessWidget {
           width: 300,
           height: 40,
           focusColor: Color.fromARGB(255, 98, 0, 238),
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => LwpScreen()));
+          },
         ),
         SizedBox(height: 10),
         MyButton(
@@ -80,6 +86,7 @@ class LoginScreen extends StatelessWidget {
           width: 300,
           height: 40,
           focusColor: Color.fromARGB(255, 98, 0, 238),
+          onTap: () {},
         ),
       ],
     );

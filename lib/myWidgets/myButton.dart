@@ -8,16 +8,17 @@ class MyButton extends StatefulWidget {
   Color? focusColor = Colors.white;
   Widget? child;
   FocusNode? focusNode;
+  Function()? onTap;
 
-  MyButton({
-    this.height,
-    this.width,
-    this.textColor,
-    this.backgroundColor,
-    this.focusColor,
-    this.child,
-    this.focusNode,
-  });
+  MyButton(
+      {this.height,
+      this.width,
+      this.textColor,
+      this.backgroundColor,
+      this.focusColor,
+      this.child,
+      this.focusNode,
+      @required this.onTap});
 
   @override
   _MyButtonState createState() => _MyButtonState();
@@ -36,7 +37,7 @@ class _MyButtonState extends State<MyButton> {
           isFocus = f;
         });
       },
-      onTap: () {},
+      onTap: widget.onTap,
       child: Container(
         height: widget.height,
         width: widget.width,

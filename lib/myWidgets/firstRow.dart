@@ -40,6 +40,7 @@ firstRow() {
                 height: 35,
                 width: 120,
                 focusColor: Color.fromARGB(255, 98, 0, 238),
+                onTap: () {},
               ),
             ],
           ),

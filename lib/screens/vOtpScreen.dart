@@ -105,6 +105,7 @@ class VotpScreen extends StatelessWidget {
           height: 35,
           focusColor: Color.fromARGB(255, 98, 0, 238),
           focusNode: vfocus,
+          onTap: () {},
         ),
       ],
     );

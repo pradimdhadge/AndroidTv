@@ -17,7 +17,7 @@ class TvApp extends StatelessWidget {
       },
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: VotpScreen(),
+        home: LoginScreen(),
       ),
     );
   }
