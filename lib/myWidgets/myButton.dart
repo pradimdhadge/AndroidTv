@@ -9,6 +9,7 @@ class MyButton extends StatefulWidget {
   Widget? child;
   FocusNode? focusNode;
   Function()? onTap;
+  bool inProcess;
 
   MyButton(
       {this.height,
@@ -18,7 +19,8 @@ class MyButton extends StatefulWidget {
       this.focusColor,
       this.child,
       this.focusNode,
-      @required this.onTap});
+      @required this.onTap,
+      this.inProcess = false});
 
   @override
   _MyButtonState createState() => _MyButtonState();
@@ -52,7 +54,15 @@ class _MyButtonState extends State<MyButton> {
           borderRadius: BorderRadius.circular(50),
         ),
         child: Center(
-          child: widget.child,
+          child: widget.inProcess
+              ? Container(
+                  height: (widget.height! - 10),
+                  width: (widget.height! - 10),
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 3,
+                  ))
+              : widget.child,
         ),
       ),
     );

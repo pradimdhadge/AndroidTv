@@ -1,12 +1,25 @@
 import 'package:androidtv/myWidgets/firstRow.dart';
 import 'package:androidtv/myWidgets/myButton.dart';
 import 'package:androidtv/myWidgets/thirdRow.dart';
+import 'package:androidtv/screens/vOtpScreen.dart';
+import 'package:androidtv/server/server_call.dart';
+import 'package:androidtv/server/server_urls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class LwpScreen extends StatelessWidget {
+class LwpScreen extends StatefulWidget {
   static final GlobalKey<FormFieldState<String>> _numkey =
       GlobalKey<FormFieldState<String>>();
+
+  @override
+  _LwpScreenState createState() => _LwpScreenState();
+}
+
+class _LwpScreenState extends State<LwpScreen> {
+  FocusNode vfocus = new FocusNode();
+  bool inProcess = false;
+  TextEditingController _mobileNoController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +38,7 @@ class LwpScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [firstRow(), _loginRow(), thirdRow()],
+                children: [firstRow(), _loginRow(context), thirdRow()],
               ),
             ),
           ),
@@ -34,7 +47,7 @@ class LwpScreen extends StatelessWidget {
     );
   }
 
-  _loginRow() {
+  _loginRow(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -74,7 +87,8 @@ class LwpScreen extends StatelessWidget {
             Container(
               width: 170,
               child: TextField(
-                key: _numkey,
+                controller: _mobileNoController,
+                key: LwpScreen._numkey,
                 cursorColor: Colors.white,
                 keyboardType: TextInputType.phone,
                 maxLength: 10,
@@ -96,6 +110,9 @@ class LwpScreen extends StatelessWidget {
                   ),
                   counter: Container(),
                 ),
+                onSubmitted: (value) {
+                  FocusScope.of(context).requestFocus(vfocus);
+                },
               ),
             )
           ],
@@ -103,7 +120,7 @@ class LwpScreen extends StatelessWidget {
         SizedBox(height: 20),
         MyButton(
           child: Text(
-            'Verify',
+            'Send Otp',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -112,7 +129,30 @@ class LwpScreen extends StatelessWidget {
           width: 100,
           height: 35,
           focusColor: Color.fromARGB(255, 98, 0, 238),
-          onTap: () {},
+          onTap: () async {
+            String _mobileNo = _mobileNoController.value.text;
+            if (_mobileNo.isEmpty || _mobileNo == '') {
+              Fluttertoast.showToast(msg: 'Enter valid mobile number');
+              return false;
+            }
+            setState(() {
+              inProcess = true;
+            });
+            Map response = await ServerCall().postRequest(
+                path: Urls.loginOtp, arguments: {'mobile_no': _mobileNo});
+            setState(() {
+              inProcess = false;
+            });
+            if (response['statusCode'] == 200) {
+              if (response['status'] == 'TXN') {
+                Fluttertoast.showToast(msg: response['message']);
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => VotpScreen(_mobileNo)));
+              }
+            }
+          },
+          inProcess: inProcess,
+          focusNode: vfocus,
         ),
       ],
     );

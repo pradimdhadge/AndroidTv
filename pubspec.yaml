@@ -34,6 +34,10 @@ dependencies:
   flutter_secure_storage: ^4.2.1
   http: ^0.13.3
   connectivity: ^3.0.6
+  youtube_player_flutter: ^8.0.0
+  youtube_player_iframe: ^2.2.2
+  video_player: ^2.2.5
+  chewie: ^1.1.0
 
 dev_dependencies:
   flutter_test:
